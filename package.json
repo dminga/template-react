@@ -4,11 +4,10 @@
   "description": "{Description}",
   "main": "index.js",
   "scripts": {
-    "build":  "NODE_ENV='production' webpack -p",
-    "hot":    "webpack-dev-server --content-base dist/ --hot --port 8080",
+    "build": "NODE_ENV='production' webpack -p",
+    "hot": "webpack-dev-server --content-base dist/ --hot --port 8080",
     "client": "",
     "server": ""
-
   },
   "repository": {
     "type": "git",
@@ -18,11 +17,15 @@
   "license": "MIT",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "bluebird": "^3.5.1",
     "css-loader": "^0.28.7",
     "less-loader": "^4.0.5",
     "postcss-loader": "^2.0.9",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "style-loader": "^0.19.0"
   },
   "devDependencies": {
