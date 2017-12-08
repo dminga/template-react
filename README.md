@@ -16,4 +16,5 @@ Customization for {new_project}:
 
 Run "npm install" to install all dependencies
 
-Run "npm run hot" to run webpack-dev-server with app
+Run "npm run iso-client" to run webpack-dev-server compiling bundle.js
+Run "npm run iso-server" to run nodemon server
