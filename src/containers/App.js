@@ -11,6 +11,7 @@ import '../styles/bootstrap.css'
 class App extends Component {
   constructor (props) {
     super(props)
+    //TODO: check if state already exists in cookies or server
     this.store = createStore(
       mainReducer,
       applyMiddleware(thunk)
