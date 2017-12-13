@@ -23,5 +23,9 @@ module.exports = {
       { test: /\.css$/, loader: 'style-loader!css-loader!postcss-loader' },
       { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!less-loader') }
     ]
+  },
+  node: {
+    fs: 'empty',
+    child_process: 'empty',
   }
 }

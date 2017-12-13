@@ -3,10 +3,12 @@ import React, { Component } from 'react'
 class Footer extends Component {
   render() {
     return(
-      <div>
+      <footer className='fixed-bottom'>
         <hr/>
-        <h3>FooterContent</h3>
-      </div>
+        <p>
+        FooterContent
+        </p>
+      </footer>
     )
   }
 }

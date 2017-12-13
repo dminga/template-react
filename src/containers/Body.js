@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { Switch, Route } from 'react-router-dom'
+import WelcomePage from '../components/WelcomePage'
+import LoginPage from '../components/LoginPage'
 
 class Body extends Component {
   constructor(props) {
@@ -7,7 +10,10 @@ class Body extends Component {
   render() {
     return(
       <div>
-        <p>Body:</p>
+        <Switch>
+          <Route exact path='/login' component={LoginPage}/>
+          <Route component={WelcomePage}/>
+        </Switch>
       </div>
     )
   }

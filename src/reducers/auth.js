@@ -1,4 +1,5 @@
 import * as actions from '../actions/actionTypes'
+import { push } from 'react-router-redux'
 
 const initialState = {
   isLoading: false,
@@ -10,10 +11,12 @@ const initialState = {
 export default function auth (state = initialState, action) {
   switch (action.type) {
     case actions.ACTION_LOGIN_REQEST:
+      dispatch(push('/')) //Tests
       return {...state,
         isLoading: true
       }
     case actions.ACTION_LOGIN_OK:
+      dispatch(push('/'))
       return {...state,
         isLoading: false,
         user: action.payload.user,
