@@ -1,55 +1,26 @@
 import * as actionTypes from './actionTypes'
-import * as work from './someAsyncWork'
+import { loginApi } from './login'
 
-/* ACTION 0 */
-export const action0 = (value) => {
-  return {
-    type: actionTypes.ACTION_0_SYNC,
-    payload: {
-      value: value
-    }
-  }
-}
-
-/* ACTION 1 */
-export const action1Start = (value) => {
-  return {
-    type: actionTypes.ACTION_1_ASYNC_START,
-    payload: {
-      value: value
-    }
-  }
-}
-
-export const action1Ok = (retValue) => {
-  return {
-    type: actionTypes.ACTION_1_ASYNC_OK,
-    payload: {
-      value: retValue,
-      error: false
-    }
-  }
-}
-
-export const action1Failed = (error) => {
-  return {
-    type: actionTypes.ACTION_1_ASYNC_FAILED,
-    payload: {
-      error: true,
-      errorMsg: error
-    }
-  }
-}
-
-export const action1Async = (value) => {
+/* AUTH ACTIONS */
+export const actionLogin = (user, password) => {
   return (dispatch, getState) => {
-    dispatch(action1Start())
-    work.asynWork0(value)
+    dispatch(()=>{return {
+      type: actionTypes.ACTION_LOGIN_REQEST
+    }})
+    loginApi(user, password)
     .then((retValue) => {
-      dispatch(action1Ok(retValue))
+      dispatch((retValue)=>{return {
+        type: actionTypes.ACTION_LOGIN_OK,
+        payload: retValue
+      }})
     })
     .catch((error) => {
-      dispatch(action1Failed(error))
+      dispatch((error)=>{return {
+        type: actionTypes.ACTION_LOGIN_FAILED,
+        payload: error
+      }})
     })
   }
+}
+
 }

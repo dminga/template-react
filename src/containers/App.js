@@ -3,9 +3,9 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import mainReducer from '../reducers'
-import Header from '../components/Header'
-import Body from '../components/Body'
-import Footer from '../components/Footer'
+import Header from './Header'
+import Body from './Body'
+import Footer from './Footer'
 import '../styles/bootstrap.css'
 
 class App extends Component {
