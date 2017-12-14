@@ -1,4 +1,4 @@
-import ursa from 'ursa'
+import crypto from 'crypto'
 
 export const loginApi = (user, pass) => {
   var restDir = '/api/login/' + user
@@ -6,11 +6,18 @@ export const loginApi = (user, pass) => {
     fetch(restDir, {method: 'GET'})
     .then((provisionMsg) => {
       var pubKeyStr = provisionMsg.pubKey
-      var pubKey = ursa.createPublicKey(pubKeyStr)
-      var passwordEnc = ursa.encryptMsg(pubkey, password, 'format')
-      fetch(restDir, {method: 'POST', password: passwordEnc})
+      console.log('Client got pubkey: ', pubKeyStr);
+      var passwordEnc = crypto.publicEncrypt(pubKeyStr, pass)
+      fetch(restDir, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({password: passwordEnc})
+      })
       .then((doneMsg) => {
-        resolve({
+          resolve({
           user: doneMsg.user,
           sessionId: doneMsg.sessionId,
           token: doneMsg.token

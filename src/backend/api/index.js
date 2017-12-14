@@ -1,7 +1,9 @@
 import express from 'express'
-import loginRouter from './login'
+import { loginGet, loginPost } from './login'
 
 var apiRouter = express.Router();
-apiRouter.use('/login/:userName', loginRouter);
+apiRouter.get('/login/:userName', loginGet)
+apiRouter.post('/login/:userName', loginPost)
+// apiRouter.use('/login/:userName', loginRouter);
 
 export default apiRouter

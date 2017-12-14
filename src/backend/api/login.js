@@ -1,27 +1,26 @@
-import express from 'express'
-import ursa from 'ursa'
-// import fs from 'fs'
+import crypto from 'crypto'
 
-var loginRouter = express.Router();
 var keyPair = null;
 
-loginRouter.get((req, res) => {
+export function loginGet(req, res) {
   var user = req.params.userName
 
   console.log('User [', user, '] request access');
 
   /* Server generates keypair and send Public to client */
-  keyPair = ursa.generatePrivateKey()
-  console.log('PRIVATE: ', keyPair.toPrivatePem('utf8'))
-  console.log('PUBLIC: ', keyPair.toPublicPem('utf8'))
+  keyPair = crypto.createDiffieHellman(1024)
+  keyPair.generateKeys()
+  console.log('PRIVATE: ', keyPair.getPrivateKey('base64'))
+  console.log('PUBLIC: ', keyPair.getPublicKey('base64'))
 
   res.json({
     user: user,
-    pubKey: keyPair.toPublicPem('utf8')
+    pubKey: keyPair.getPublicKey('base64')
   })
-})
+}
 
-loginRouter.post((req, res) => {
+export function loginPost(req, res) {
+  console.log('backend got POST');
   var user = req.params.userName
   var passwordEnc
   if (req.body.password !== 'undefined') {
@@ -38,7 +37,7 @@ loginRouter.post((req, res) => {
   }
 
   console.log('User [', user, '] posts encrypted password');
-  var passwordDec = keyPair.decrypt(passwordEnc, 'base64', 'utf8')
+  var passwordDec = keyPair.privateDecrypt(keyPair.getPrivateKey('base64'), passwordEnc)
   console.log('User password is ', passwordDec);
 
   res.json({
@@ -50,6 +49,4 @@ loginRouter.post((req, res) => {
   // var pubKey = ursa.createPublicKey(keyPair.toPublicPem('utf8'), 'utf8')
   // var encrypted = pubKey.encrypt(password, 'utf8', 'base64')
   // console.log('ENCRYPTED: ', encrypted)
-})
-
-export default loginRouter
+}

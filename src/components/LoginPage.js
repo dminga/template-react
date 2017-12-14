@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router-dom'
 import { Form, Button, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
+import { connect } from 'react-redux'
 import { actionLogin } from '../actions'
 
 function FieldGroup({ id, label, help, ...props }) {
@@ -53,4 +54,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default LoginPage
+export default connect(()=>{return{}}, mapDispatchToProps)(LoginPage)
