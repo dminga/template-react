@@ -4,19 +4,19 @@ import { Form, Button, FormGroup, FormControl, ControlLabel, HelpBlock } from 'r
 import { connect } from 'react-redux'
 import { actionLogin } from '../actions'
 
-function FieldGroup({ id, label, help, ...props }) {
+const FieldGroup = ({id, label, help, inputRef, ...props}) => {
   return (
-    <FormGroup controlId={id}>
-      <ControlLabel>{label}</ControlLabel>
-      <FormControl {...props} />
-      {help && <HelpBlock>{help}</HelpBlock>}
-    </FormGroup>
-  );
-}
+  <FormGroup controlId={id}>
+    <ControlLabel>{label}</ControlLabel>
+    <FormControl {...props} inputRef={inputRef}/>
+    {help && <HelpBlock>{help}</HelpBlock>}
+  </FormGroup>
+)}
 
 class LoginPage extends Component {
   render() {
     var isLoading = this.props.isLoading
+    var hasError = (this.props.error !== '')
     return (
       <div className='card mx-auto' style={{width: '20rem'}}>
         <Form className='card-body'>
@@ -26,21 +26,26 @@ class LoginPage extends Component {
             type='text'
             label='User:'
             placeholder='Enter username'
+            inputRef={(ref)=>{this.inputUser=ref}}
           />
           <FieldGroup
             id='inputPass'
             type='password'
             label='Password:'
+            inputRef={(ref)=>{this.inputPass=ref}}
           />
-          <label className={isLoading?'visible':'invisible'}>
-          Loading...
+          <label className={(isLoading||hasError)?'visible':'invisible'}>
+          {(isLoading)?'Loading...':''}
+          {(hasError)?('Error: '+this.props.error):''}
           </label>
           <Button
             className='float-right'
             bsStyle='primary'
             onClick={()=>{
-              console.log('clicked')
-              this.props.onLogin('1','2')
+              this.props.onLogin(
+                this.inputUser.value,
+                this.inputPass.value
+              )
             }}
           >
             Log in
@@ -53,7 +58,8 @@ class LoginPage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.auth.isLoading
+    isLoading: state.auth.isLoading,
+    error: state.auth.error
   }
 }
 

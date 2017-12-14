@@ -10,15 +10,19 @@ export const actionLogin = (user, password) => {
     })
     loginApi(user, password)
     .then((retValue) => {
+      console.log('dispatch ok');
       dispatch({
         type: actionTypes.ACTION_LOGIN_OK,
         payload: retValue
       })
     })
     .catch((error) => {
+      console.log('dispatch failed');
       dispatch({
         type: actionTypes.ACTION_LOGIN_FAILED,
-        payload: error
+        payload: {
+          error: error
+        }
       })
     })
   }

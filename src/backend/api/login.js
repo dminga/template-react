@@ -37,15 +37,29 @@ export const loginGet = (req, res) => {
 }
 
 export const loginPost = (req, res) => {
-  console.log('backend got POST');
   /* Check input fields */
-  //do here
-  // local.secret = local.dh.computeSecret(pubKeyFromReq)
-  // local.decipher = crypto.createDecipher('aes192', local.secret)
-  // var passDec = local.decipher.update(passFromReq, 'utf8', 'base64') + local.decipher.final('base64')
+  if ((req.body.user === undefined) ||
+      (req.body.password === undefined) ||
+      (req.body.pubKey.data === undefined)) {
+        res.json({error: "Bad data"})
+      }
+  var user = req.body.user
+  var passEnc = req.body.password
+  var pubKey = new Buffer(req.body.pubKey.data)
+
+  console.log('User [', user, '] posts password', passEnc);
+
+  /* Decrypt password */
+  local.secret = local.dh.computeSecret(pubKey)
+  local.decipher = crypto.createDecipher('aes192', local.secret)
+  var passDec = local.decipher.update(passEnc, 'base64', 'utf8') + local.decipher.final('utf8')
+
   /* Check password */
+  console.log('User pass: ', passDec);
+
   /* Reply */
   res.json({
-    msg: 'lol'
+    msg: 'access granted'
+    //TODO: add temp token
   })
 }

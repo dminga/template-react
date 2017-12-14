@@ -29,7 +29,6 @@ export const loginApi = (user, pass) => {
       fetch(restDir, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -40,17 +39,20 @@ export const loginApi = (user, pass) => {
       })
       .then((resPost) => resPost.json())
       .then((doneMsg) => {
+          if (doneMsg.error !== undefined) {
+            console.log("server send error: ", doneMsg);
+            reject({error: 'Server rejected'})
+          }
           /* Parse doneMsg */
           resolve({
-          done: true,
-          server: server,
-          local: local
+            server: server,
+            local: local
         })
       })
     })
     .catch((error) => {
       console.log('Error on login');
-      reject(error)
+      reject({error: error})
     })
   })
 }

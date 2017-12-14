@@ -1,5 +1,5 @@
-import https from 'https'
-import fs from 'fs'
+// import https from 'https'
+// import fs from 'fs'
 import express from 'express';
 import bodyParser from 'body-parser'
 import React from 'react';
@@ -10,7 +10,7 @@ import apiRouter from './api'
 
 const app = express();
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 app.use('/api', apiRouter)
 
@@ -48,12 +48,12 @@ function renderHTML(componentHTML) {
     `;
 }
 
-var key = fs.readFileSync('cert/private.key');
-var cert = fs.readFileSync('cert/private.crt');
-var httpsOpt = {
-  key: key,
-  cert: cert
-}
+// var key = fs.readFileSync('cert/private.key');
+// var cert = fs.readFileSync('cert/private.crt');
+// var httpsOpt = {
+//   key: key,
+//   cert: cert
+// }
 const PORT = process.env.PORT || 8080;
 // https.createServer(httpsOpt, app).listen(PORT, () => {
 //   console.log('Server listening on port %d', PORT);

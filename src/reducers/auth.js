@@ -13,24 +13,30 @@ const initialState = {
     pubKey: null,
     secret: null,
     cipher: null
-  }
+  },
+  error: ''
 }
 
 export default function auth (state = initialState, action) {
   switch (action.type) {
     case actions.ACTION_LOGIN_REQEST:
       return {...state,
-        isLoading: true
+        isLoading: true,
+        error: ''
       }
     case actions.ACTION_LOGIN_OK:
-      dispatch(push('/'))
+      console.log('Login done');
+      //TODO: dispatch push to '/'
       return {...state,
         isLoading: false,
-        server: server,
-        local: local
+        server: action.payload.server,
+        local: action.payload.local,
+        error: ''
       }
     case actions.ACTION_LOGIN_FAILED:
-      return { ...initialState }
+      return { ...initialState,
+        error: action.payload.error
+      }
     default:
       return state
   }
