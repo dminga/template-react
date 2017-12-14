@@ -16,7 +16,7 @@ function FieldGroup({ id, label, help, ...props }) {
 
 class LoginPage extends Component {
   render() {
-    console.log('Props: ', this.props);
+    var isLoading = this.props.isLoading
     return (
       <div className='card mx-auto' style={{width: '20rem'}}>
         <Form className='card-body'>
@@ -32,6 +32,9 @@ class LoginPage extends Component {
             type='password'
             label='Password:'
           />
+          <label className={isLoading?'visible':'invisible'}>
+          Loading...
+          </label>
           <Button
             className='float-right'
             bsStyle='primary'
@@ -48,10 +51,16 @@ class LoginPage extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    isLoading: state.auth.isLoading
+  }
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     onLogin: (user, password)=>(dispatch(actionLogin(user, password)))
   }
 }
 
-export default connect(()=>{return{}}, mapDispatchToProps)(LoginPage)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage)

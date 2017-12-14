@@ -9,8 +9,6 @@ class UserBar extends Component {
 
   render() {
     var isLoggedIn = (this.props.user !== '')
-    console.log('UserBar is logged in: ', isLoggedIn);
-    console.log('Props: ', JSON.stringify(this.props));
     return (
       <div>
       <span className={isLoggedIn?'visible':'invisible'}>
@@ -26,7 +24,7 @@ class UserBar extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.auth.user
+    user: state.auth.local.user
   }
 }
 

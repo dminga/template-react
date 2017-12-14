@@ -24,8 +24,10 @@ module.exports = {
       { test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!less-loader') }
     ]
   },
-  node: {
-    fs: 'empty',
-    child_process: 'empty',
+  devServer: {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+    }
   }
 }

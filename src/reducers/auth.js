@@ -3,15 +3,22 @@ import { push } from 'react-router-redux'
 
 const initialState = {
   isLoading: false,
-  user: '',
-  sessionId: '',
-  token: ''
+  server: {
+    prime: null,
+    pubKey: null
+  },
+  local: {
+    user: '',
+    dh: null,
+    pubKey: null,
+    secret: null,
+    cipher: null
+  }
 }
 
 export default function auth (state = initialState, action) {
   switch (action.type) {
     case actions.ACTION_LOGIN_REQEST:
-      dispatch(push('/')) //Tests
       return {...state,
         isLoading: true
       }
@@ -19,9 +26,8 @@ export default function auth (state = initialState, action) {
       dispatch(push('/'))
       return {...state,
         isLoading: false,
-        user: action.payload.user,
-        sessionId: action.payload.sessionId,
-        token: action.payload.token
+        server: server,
+        local: local
       }
     case actions.ACTION_LOGIN_FAILED:
       return { ...initialState }

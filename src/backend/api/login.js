@@ -1,52 +1,51 @@
 import crypto from 'crypto'
 
-var keyPair = null;
+let server = {
+  dh: null,
+  prime: null,
+}
+let local = {
+  dh: null,
+  pubKey: null,
+  secret: null,
+  decipher: null
+}
 
-export function loginGet(req, res) {
+export const loginPrepare = (size) => {
+  server.dh = crypto.createDiffieHellman(size)
+  server.prime = server.dh.getPrime()
+  console.log('Server prime: ', server.prime);
+
+  local.dh = crypto.createDiffieHellman(server.prime)
+  local.dh.generateKeys()
+  local.pubKey = local.dh.getPublicKey()
+
+  console.log('Local crypto prepared with public key: ', local.pubKey);
+}
+
+export const loginGet = (req, res) => {
   var user = req.params.userName
 
   console.log('User [', user, '] request access');
 
-  /* Server generates keypair and send Public to client */
-  keyPair = crypto.createDiffieHellman(1024)
-  keyPair.generateKeys()
-  console.log('PRIVATE: ', keyPair.getPrivateKey('base64'))
-  console.log('PUBLIC: ', keyPair.getPublicKey('base64'))
-
+  /* Send prime & public to client */
   res.json({
     user: user,
-    pubKey: keyPair.getPublicKey('base64')
+    prime: server.prime,
+    pubKey: local.pubKey
   })
 }
 
-export function loginPost(req, res) {
+export const loginPost = (req, res) => {
   console.log('backend got POST');
-  var user = req.params.userName
-  var passwordEnc
-  if (req.body.password !== 'undefined') {
-     passwordEnc = req.body.password
-  } else {
-    return res.json({
-      error: "No password provided"
-    })
-  }
-  if (keyPair === null) {
-    return res.json({
-      error: "No public key requested"
-    })
-  }
-
-  console.log('User [', user, '] posts encrypted password');
-  var passwordDec = keyPair.privateDecrypt(keyPair.getPrivateKey('base64'), passwordEnc)
-  console.log('User password is ', passwordDec);
-
+  /* Check input fields */
+  //do here
+  // local.secret = local.dh.computeSecret(pubKeyFromReq)
+  // local.decipher = crypto.createDecipher('aes192', local.secret)
+  // var passDec = local.decipher.update(passFromReq, 'utf8', 'base64') + local.decipher.final('base64')
+  /* Check password */
+  /* Reply */
   res.json({
     msg: 'lol'
   })
-
-  /* Client encrypt password by public key and send back */
-  // var password = 'SomethingUndone'
-  // var pubKey = ursa.createPublicKey(keyPair.toPublicPem('utf8'), 'utf8')
-  // var encrypted = pubKey.encrypt(password, 'utf8', 'base64')
-  // console.log('ENCRYPTED: ', encrypted)
 }
