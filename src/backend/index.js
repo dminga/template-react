@@ -5,6 +5,10 @@ import bodyParser from 'body-parser'
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import mainReducer from '../reducers'
 import App from '../containers/App'
 import apiRouter from './api'
 
@@ -15,17 +19,24 @@ app.use(bodyParser.json());
 app.use('/api', apiRouter)
 
 app.use('/', (req, res) => {
-    const context = {};
-    const componentHTML = ReactDOMServer.renderToString(
+  let store = createStore(
+    mainReducer,
+    applyMiddleware(thunk)
+  )
+
+  const context = {};
+  const componentHTML = ReactDOMServer.renderToString(
+    <Provider store={store}>
       <StaticRouter location={req.url} context={context}>
         <App />
       </StaticRouter>
-    );
-    if (context.url) {
-      return res.redirect(301, context.url);
-    } else {
-      return res.end(renderHTML(componentHTML));
-    }
+    </Provider>
+  );
+  if (context.url) {
+    return res.redirect(301, context.url);
+  } else {
+    return res.end(renderHTML(componentHTML));
+  }
 });
 
 const assetUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8081' : '/';

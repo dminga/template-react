@@ -39,20 +39,44 @@ export const loginApi = (user, pass) => {
       })
       .then((resPost) => resPost.json())
       .then((doneMsg) => {
-          if (doneMsg.error !== undefined) {
-            console.log("server send error: ", doneMsg);
-            reject({error: 'Server rejected'})
-          }
-          /* Parse doneMsg */
-          resolve({
-            server: server,
-            local: local
+        if (doneMsg.error !== undefined) {
+          console.log("server send error: ", doneMsg)
+          reject({error: 'Server rejected'})
+        }
+        /* Parse doneMsg */
+        resolve({
+          server: server,
+          local: local
         })
       })
     })
     .catch((error) => {
-      console.log('Error on login');
+      console.log('Error on login')
       reject({error: error})
+    })
+  })
+}
+
+export const logoutApi = (local) => {
+  var restDir = '/api/logout/' + local.user
+  return new Promise((resolve, reject) => {
+    var userEnc = local.cipher.update(local.user, 'utf8', 'base64') + local.cipher.final('base64')
+    fetch(restDir, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        data: userEnc
+      })
+    })
+    .then((resPost) => resPost.json())
+    .then((result)=>{
+      if (result.error === undefined)
+      console.log('Logout successfully');
+    })
+    .catch((error)=>{
+      console.log('Logout error: ', error);
     })
   })
 }

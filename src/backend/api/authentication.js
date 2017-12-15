@@ -42,6 +42,7 @@ export const loginPost = (req, res) => {
       (req.body.password === undefined) ||
       (req.body.pubKey.data === undefined)) {
         res.json({error: "Bad data"})
+        return
       }
   var user = req.body.user
   var passEnc = req.body.password
@@ -52,7 +53,7 @@ export const loginPost = (req, res) => {
   /* Decrypt password */
   local.secret = local.dh.computeSecret(pubKey)
   local.decipher = crypto.createDecipher('aes192', local.secret)
-  var passDec = local.decipher.update(passEnc, 'base64', 'utf8') + local.decipher.final('utf8')
+  var passDec = local.decipher.update(passEnc, 'base64', 'utf8')// + local.decipher.final('utf8')
 
   /* Check password */
   console.log('User pass: ', passDec);
@@ -61,5 +62,26 @@ export const loginPost = (req, res) => {
   res.json({
     msg: 'access granted'
     //TODO: add temp token
+  })
+}
+
+export const logoutPost = (req, res) => {
+  /* Check input fields */
+  if (req.body.data === undefined) {
+    res.json({error: "Bad data"})
+    return
+  }
+
+  var data = req.body.data
+  var user = local.decipher.update(data, 'base64', 'utf8')// + local.decipher.final('utf8')
+
+console.log('User [', req.params.user, '] logout: ', data);
+  if (user !== req.params.user) {
+    res.json({error: "Bad data"})
+    return
+  }
+  /* Reply */
+  res.json({
+    msg: 'Logout'
   })
 }

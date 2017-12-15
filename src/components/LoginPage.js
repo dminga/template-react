@@ -14,6 +14,12 @@ const FieldGroup = ({id, label, help, inputRef, ...props}) => {
 )}
 
 class LoginPage extends Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.redirect !== '') {
+      this.props.history.push(nextProps.redirect)
+    }
+  }
+
   render() {
     var isLoading = this.props.isLoading
     var hasError = (this.props.error !== '')
@@ -34,7 +40,13 @@ class LoginPage extends Component {
             label='Password:'
             inputRef={(ref)=>{this.inputPass=ref}}
           />
-          <label className={(isLoading||hasError)?'visible':'invisible'}>
+          <label
+            className={
+              (isLoading||hasError)?'visible ':'invisible '+
+              (hasError)?', bg-danger':''+
+              (isLoading)?', bg-info':''
+            }
+          >
           {(isLoading)?'Loading...':''}
           {(hasError)?('Error: '+this.props.error):''}
           </label>
@@ -59,7 +71,8 @@ class LoginPage extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoading: state.auth.isLoading,
-    error: state.auth.error
+    error: state.auth.error,
+    redirect: state.auth.redirect
   }
 }
 

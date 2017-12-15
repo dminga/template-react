@@ -1,5 +1,4 @@
 import * as actions from '../actions/actionTypes'
-import { push } from 'react-router-redux'
 
 const initialState = {
   isLoading: false,
@@ -14,7 +13,8 @@ const initialState = {
     secret: null,
     cipher: null
   },
-  error: ''
+  error: '',
+  redirect: ''
 }
 
 export default function auth (state = initialState, action) {
@@ -25,18 +25,19 @@ export default function auth (state = initialState, action) {
         error: ''
       }
     case actions.ACTION_LOGIN_OK:
-      console.log('Login done');
-      //TODO: dispatch push to '/'
       return {...state,
         isLoading: false,
         server: action.payload.server,
         local: action.payload.local,
-        error: ''
+        error: '',
+        redirect: '/'
       }
     case actions.ACTION_LOGIN_FAILED:
       return { ...initialState,
         error: action.payload.error
       }
+    case actions.ACTION_LOGOUT:
+      return { ...initialState }
     default:
       return state
   }
